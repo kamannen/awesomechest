@@ -1,0 +1,16 @@
+[
+{
+  "modid": "awesomechest",
+  "name": "Awesome Chests",
+  "description": "Ads an awesome chest to your Minecrafts!",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Kamannen"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
