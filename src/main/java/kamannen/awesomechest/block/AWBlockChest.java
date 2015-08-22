@@ -1,13 +1,13 @@
 package kamannen.awesomechest.block;
 
+import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 import kamannen.awesomechest.AwesomechestMod;
+import kamannen.awesomechest.gui.EGUIs;
 import kamannen.awesomechest.lib.Names;
 import kamannen.awesomechest.tileentity.ChestTileEntity;
 import net.minecraft.block.BlockChest;
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -19,6 +19,7 @@ public class AWBlockChest extends BlockChest {
         this.setBlockName(Names.Blocks.AWESOME_CHEST);
         this.setHardness(1.0F);
         this.setResistance(5.0F);
+        //this.setBlockTextureName(References.MOD_ID + ":" + Names.getBlockName(this));
     }
 
     @Override
@@ -44,18 +45,14 @@ public class AWBlockChest extends BlockChest {
         return -1;
     }
 
-    /*@Override
-    public boolean onBlockActivated(final World world, final int i, final int j, final int k, final EntityPlayer player, final int i1, final float f1, final float f2, final float f3) {
-        final TileEntity te = world.getTileEntity(i, j, k);
-
-        if (world.isRemote) {
-            return true;
-        }
-
-        if (te != null && te instanceof IInventory) {
-            player.displayGUIChest((IInventory) te);
+    @Override
+    public boolean onBlockActivated(final World world, final int x, final int y, final int z,
+                                    final EntityPlayer entityPlayer, final int i1,
+                                    final float f1, final float f2, final float f3) {
+        if (!world.isRemote) {
+            FMLNetworkHandler.openGui(entityPlayer, AwesomechestMod.instance, EGUIs.CHEST.ordinal(), world, x, y, z);
         }
 
         return true;
-    }*/
+    }
 }

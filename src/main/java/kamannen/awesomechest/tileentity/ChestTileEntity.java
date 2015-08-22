@@ -21,6 +21,12 @@ public class ChestTileEntity extends TileEntityChest {
     }
 
     @Override
+    public void closeInventory() {
+        super.closeInventory();
+//        writeToNBT();
+    }
+
+    @Override
     public ItemStack getStackInSlot(final int i) {
         return super.getStackInSlot(i);
     }
