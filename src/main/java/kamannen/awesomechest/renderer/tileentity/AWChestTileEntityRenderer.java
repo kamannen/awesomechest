@@ -17,11 +17,16 @@ import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
-public class AWChestTileEntityRenderer extends TileEntityChestRenderer {
+public class AWChestTileEntityRenderer extends TileEntitySpecialRenderer {
 
     private RenderBlocks renderBlocks;
 
     public AWChestTileEntityRenderer() {
+    }
+
+    @Override
+    public void renderTileEntityAt(final TileEntity p_147500_1_, final double p_147500_2_, final double p_147500_4_, final double p_147500_6_, final float p_147500_8_) {
+
     }
 
     /*@Override

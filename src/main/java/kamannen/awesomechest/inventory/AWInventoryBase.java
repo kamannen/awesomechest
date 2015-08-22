@@ -98,28 +98,6 @@ public class AWInventoryBase implements IInventory {
         return true;
     }
 
-    /*public void save(NBTTagCompound nbtTagCompound) {
-
-        if (nbtTagCompound == null) {
-            nbtTagCompound = new NBTTagCompound();
-
-            final UUID uuid = UUID.randomUUID();
-            nbtTagCompound.setLong(Names.NBT.UUID_MOST_SIG, uuid.getMostSignificantBits());
-            nbtTagCompound.setLong(Names.NBT.UUID_LEAST_SIG, uuid.getLeastSignificantBits());
-        }
-
-        writeToNBT(nbtTagCompound);
-    }*/
-
-    /*public void readFromNBT(final NBTTagCompound nbttagcompound) {
-        NBTHelper.readInventoryItemsFromNBT(nbttagcompound, this);
-    }
-
-    @Override
-    public void writeToNBT(final NBTTagCompound nbttagcompound) {
-        NBTHelper.writeInventoryItemsToNBT(nbttagcompound, this);
-    }*/
-
     public boolean hasUUID(final ItemStack itemStack) {
         return NBTHelper.hasUUID(itemStack);
     }

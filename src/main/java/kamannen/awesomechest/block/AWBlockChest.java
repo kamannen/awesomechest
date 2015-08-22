@@ -50,7 +50,7 @@ public class AWBlockChest extends BlockChest {
                                     final EntityPlayer entityPlayer, final int i1,
                                     final float f1, final float f2, final float f3) {
         if (!world.isRemote) {
-            FMLNetworkHandler.openGui(entityPlayer, AwesomechestMod.instance, EGUIs.CHEST.ordinal(), world, x, y, z);
+            entityPlayer.openGui(AwesomechestMod.instance, EGUIs.CHEST.ordinal(), world, x, y, z);
         }
 
         return true;

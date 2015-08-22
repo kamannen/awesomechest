@@ -4,7 +4,6 @@ import cpw.mods.fml.client.registry.ClientRegistry;
 import kamannen.awesomechest.gui.EGUIs;
 import kamannen.awesomechest.gui.GUIAWChest;
 import kamannen.awesomechest.gui.GUILock;
-import kamannen.awesomechest.inventory.InventoryAWChest;
 import kamannen.awesomechest.inventory.InventoryLock;
 import kamannen.awesomechest.renderer.tileentity.AWChestTileEntityRenderer;
 import kamannen.awesomechest.tileentity.ChestTileEntity;
@@ -26,7 +25,7 @@ public class ClientProxy extends CommonProxy {
         } else if (ID == EGUIs.CHEST.ordinal()) {
             final TileEntity tileEntity = world.getTileEntity(x, y, z);
             if (tileEntity instanceof ChestTileEntity) {
-                return new GUIAWChest(player, new InventoryAWChest(), (ChestTileEntity) tileEntity);
+                return new GUIAWChest(player, (ChestTileEntity) tileEntity);
             } else {
                 return null;
             }

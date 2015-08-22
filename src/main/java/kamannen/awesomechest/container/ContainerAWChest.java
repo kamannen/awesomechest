@@ -1,7 +1,7 @@
 package kamannen.awesomechest.container;
 
-import kamannen.awesomechest.inventory.InventoryAWChest;
 import kamannen.awesomechest.item.ItemLock;
+import kamannen.awesomechest.tileentity.ChestTileEntity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
@@ -10,10 +10,10 @@ import net.minecraft.item.ItemStack;
 
 public class ContainerAWChest extends Container {
 
-    private final InventoryAWChest inventoryAWChest;
+    private final ChestTileEntity inventory;
 
-    public ContainerAWChest(final EntityPlayer player, final InventoryAWChest inventory) {
-        this.inventoryAWChest = inventory;
+    public ContainerAWChest(final EntityPlayer player, final ChestTileEntity inventory) {
+        this.inventory = inventory;
         final int sizeInventory = inventory.getSizeInventory();
 
         final int slotPixelSize = 18;
@@ -25,8 +25,8 @@ public class ContainerAWChest extends Container {
         layoutContainer(player, inventory, xSize, ySize);
     }
 
-    public InventoryAWChest getInventoryAWChest() {
-        return inventoryAWChest;
+    public ChestTileEntity getMyInventory() {
+        return inventory;
     }
 
     @Override
@@ -47,13 +47,14 @@ public class ContainerAWChest extends Container {
         if (slot != null && slot.getHasStack()) {
             final ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
-            if (i < 1) {
-                if (!mergeItemStack(itemstack1, 1, inventorySlots.size(), false)) {
+            final int sizeInventory = this.inventory.getSizeInventory();
+            if (i < sizeInventory) {
+                if (!mergeItemStack(itemstack1, sizeInventory, inventorySlots.size(), false)) {
                     return null;
                 }
             } else if (itemstack.getItem() instanceof ItemLock) {
                 return null;
-            } else if (!mergeItemStack(itemstack1, 0, 1, false)) {
+            } else if (!mergeItemStack(itemstack1, 0, sizeInventory, false)) {
                 return null;
             }
 

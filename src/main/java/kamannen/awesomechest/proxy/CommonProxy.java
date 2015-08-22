@@ -4,9 +4,10 @@ import cpw.mods.fml.common.network.IGuiHandler;
 import kamannen.awesomechest.container.ContainerAWChest;
 import kamannen.awesomechest.container.ContainerLock;
 import kamannen.awesomechest.gui.EGUIs;
-import kamannen.awesomechest.inventory.InventoryAWChest;
 import kamannen.awesomechest.inventory.InventoryLock;
+import kamannen.awesomechest.tileentity.ChestTileEntity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 public class CommonProxy implements IGuiHandler {
@@ -19,7 +20,12 @@ public class CommonProxy implements IGuiHandler {
         if (ID == EGUIs.LOCK.ordinal()) {
             return new ContainerLock(player, new InventoryLock(player.getHeldItem()));
         } else if (ID == EGUIs.CHEST.ordinal()) {
-            return new ContainerAWChest(player, new InventoryAWChest());
+            final TileEntity tileEntity = world.getTileEntity(x, y, z);
+            if (tileEntity instanceof ChestTileEntity) {
+                return new ContainerAWChest(player, (ChestTileEntity) tileEntity);
+            } else {
+                return null;
+            }
         } else {
             return null;
         }

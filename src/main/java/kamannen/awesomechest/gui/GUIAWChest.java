@@ -3,7 +3,6 @@ package kamannen.awesomechest.gui;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import kamannen.awesomechest.container.ContainerAWChest;
-import kamannen.awesomechest.inventory.InventoryAWChest;
 import kamannen.awesomechest.lib.References;
 import kamannen.awesomechest.lib.Values;
 import kamannen.awesomechest.tileentity.ChestTileEntity;
@@ -16,13 +15,11 @@ import org.lwjgl.opengl.GL11;
 @SideOnly(Side.CLIENT)
 public class GUIAWChest extends GuiContainer {
 
-    private final InventoryAWChest inventoryAWChest;
     private final EntityPlayer player;
     private final ChestTileEntity chestTileEntity;
 
-    public GUIAWChest(final EntityPlayer player, final InventoryAWChest inventory, final ChestTileEntity tileEntity) {
-        super(new ContainerAWChest(player, inventory));
-        this.inventoryAWChest = inventory;
+    public GUIAWChest(final EntityPlayer player, final ChestTileEntity tileEntity) {
+        super(new ContainerAWChest(player, tileEntity));
         this.chestTileEntity = tileEntity;
         this.player = player;
         this.xSize = 176;
@@ -50,7 +47,7 @@ public class GUIAWChest extends GuiContainer {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         int chestSize = Values.Entities.CHEST_INVENTORY_SIZE_SMALL;
         if (super.inventorySlots instanceof ContainerAWChest) {
-            chestSize = ((ContainerAWChest) super.inventorySlots).getInventoryAWChest().getSizeInventory();
+            chestSize = ((ContainerAWChest) super.inventorySlots).getMyInventory().getSizeInventory();
         }
         this.mc.getTextureManager().bindTexture(new ResourceLocation(References.MOD_ID,
                 "textures/gui/chest_inventory_" + chestSize + ".png"));
