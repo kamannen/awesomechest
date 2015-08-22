@@ -31,7 +31,16 @@ public class GUIAWChest extends GuiContainer {
 
     @Override
     protected void drawGuiContainerForegroundLayer(final int a, final int b) {
-        this.fontRendererObj.drawString(this.chestTileEntity.hasCustomInventoryName() ? this.chestTileEntity.getInventoryName() : I18n.format(this.chestTileEntity.getInventoryName()), 8, 6, 4210752);
+
+        final String inventoryName = this.chestTileEntity.hasCustomInventoryName() ? this.chestTileEntity.getInventoryName() : I18n.format(this.chestTileEntity.getInventoryName());
+
+        if (this.fontRendererObj.getStringWidth(inventoryName) >= this.ySize) {
+            GL11.glPushMatrix();
+            GL11.glScalef(0.7F, 0.9F, 0.7F);
+            this.fontRendererObj.drawString(inventoryName, 8, 6, 4210752);
+            GL11.glPopMatrix();
+        }
+
         this.fontRendererObj.drawString(this.player.inventory.hasCustomInventoryName() ? this.player.inventory.getInventoryName() : I18n.format(this.player.inventory.getInventoryName()), 8, this.ySize - 96 + 2, 4210752);
 
     }
