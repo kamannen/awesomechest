@@ -9,6 +9,9 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
 public class ChestTileEntity extends TileEntity implements IInventory {
@@ -23,7 +26,6 @@ public class ChestTileEntity extends TileEntity implements IInventory {
 
     public ChestTileEntity() {
         super();
-        setPlayer(null);
         content = new ItemStack[Values.Entities.CHEST_INVENTORY_SIZE_SMALL];
     }
 
@@ -77,7 +79,6 @@ public class ChestTileEntity extends TileEntity implements IInventory {
             itemStack.stackSize = this.getInventoryStackLimit();
         }
 
-
         this.markDirty();
     }
 
@@ -119,10 +120,6 @@ public class ChestTileEntity extends TileEntity implements IInventory {
         return true;
     }
 
-    /**
-     * Allows the entity to update its state. Overridden in most subclasses, e.g. the mob spawner uses this to count
-     * ticks and creates a new spawn inside its implementation.
-     */
     @Override
     public void updateEntity() {
         super.updateEntity();
@@ -166,9 +163,6 @@ public class ChestTileEntity extends TileEntity implements IInventory {
         }
     }
 
-    /**
-     * Called when a client event is received with the event number and argument, see World.sendClientEvent
-     */
     @Override
     public boolean receiveClientEvent(int eventID, int numUsingPlayers) {
         if (eventID == 1) {
@@ -182,6 +176,9 @@ public class ChestTileEntity extends TileEntity implements IInventory {
     @Override
     public void readFromNBT(NBTTagCompound nbtTagCompound) {
         super.readFromNBT(nbtTagCompound);
+
+        this.storedBlock = Block.getBlockById(nbtTagCompound.getInteger("blockId"));
+        this.playerName = nbtTagCompound.getString("playerName");
 
         NBTTagList tagList = nbtTagCompound.getTagList(Names.NBT.ITEMS, 10);
         content = new ItemStack[this.getSizeInventory()];
@@ -198,6 +195,9 @@ public class ChestTileEntity extends TileEntity implements IInventory {
     public void writeToNBT(NBTTagCompound nbtTagCompound) {
         super.writeToNBT(nbtTagCompound);
 
+        nbtTagCompound.setInteger("blockId", Block.getIdFromBlock(this.storedBlock));
+        nbtTagCompound.setString("playerName", this.playerName);
+
         NBTTagList tagList = new NBTTagList();
         for (int currentIndex = 0; currentIndex < content.length; ++currentIndex) {
             if (content[currentIndex] != null) {
@@ -208,5 +208,17 @@ public class ChestTileEntity extends TileEntity implements IInventory {
             }
         }
         nbtTagCompound.setTag(Names.NBT.ITEMS, tagList);
+    }
+
+    @Override
+    public Packet getDescriptionPacket() {
+        NBTTagCompound tag = new NBTTagCompound();
+        this.writeToNBT(tag);
+        return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 1, tag);
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
+        readFromNBT(packet.func_148857_g());
     }
 }

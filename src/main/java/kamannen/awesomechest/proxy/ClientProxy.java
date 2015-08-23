@@ -25,7 +25,6 @@ public class ClientProxy extends CommonProxy {
 
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.AW_BLOCK_CHEST), new ItemRendererAWChest());
 
-
         ClientRegistry.bindTileEntitySpecialRenderer(ChestTileEntity.class, new AWChestTileEntityRenderer());
     }
 
