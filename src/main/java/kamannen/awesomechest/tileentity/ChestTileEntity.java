@@ -1,6 +1,5 @@
 package kamannen.awesomechest.tileentity;
 
-import kamannen.awesomechest.block.ModBlocks;
 import kamannen.awesomechest.lib.Names;
 import kamannen.awesomechest.lib.Values;
 import net.minecraft.block.Block;
@@ -119,13 +118,13 @@ public class ChestTileEntity extends TileEntity implements IInventory {
     @Override
     public void openInventory() {
         ++numUsingPlayers;
-        worldObj.addBlockEvent(xCoord, yCoord, zCoord, ModBlocks.AW_BLOCK_CHEST, 1, numUsingPlayers);
+        worldObj.addBlockEvent(xCoord, yCoord, zCoord, this.getBlockType(), 1, numUsingPlayers);
     }
 
     @Override
     public void closeInventory() {
         --numUsingPlayers;
-        worldObj.addBlockEvent(xCoord, yCoord, zCoord, ModBlocks.AW_BLOCK_CHEST, 1, numUsingPlayers);
+        worldObj.addBlockEvent(xCoord, yCoord, zCoord, this.getBlockType(), 1, numUsingPlayers);
     }
 
     @Override
@@ -138,7 +137,7 @@ public class ChestTileEntity extends TileEntity implements IInventory {
         super.updateEntity();
 
         if (++ticksSinceSync % 20 * 4 == 0) {
-            worldObj.addBlockEvent(xCoord, yCoord, zCoord, ModBlocks.AW_BLOCK_CHEST, 1, numUsingPlayers);
+            worldObj.addBlockEvent(xCoord, yCoord, zCoord, this.getBlockType(), 1, numUsingPlayers);
         }
 
         prevLidAngle = lidAngle;

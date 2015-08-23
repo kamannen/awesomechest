@@ -14,6 +14,7 @@ public class ContainerAWChest extends Container {
 
     public ContainerAWChest(final EntityPlayer player, final ChestTileEntity inventory) {
         this.inventory = inventory;
+        inventory.openInventory();
         final int sizeInventory = inventory.getSizeInventory();
 
         final int slotPixelSize = 18;
@@ -37,6 +38,7 @@ public class ContainerAWChest extends Container {
     @Override
     public void onContainerClosed(final EntityPlayer player) {
         super.onContainerClosed(player);
+        this.inventory.closeInventory();
     }
 
 
