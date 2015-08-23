@@ -4,10 +4,9 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import kamannen.awesomechest.container.ContainerLock;
 import kamannen.awesomechest.inventory.InventoryLock;
-import kamannen.awesomechest.lib.References;
+import kamannen.awesomechest.lib.Textures;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 
@@ -23,7 +22,7 @@ public class GUILock extends GuiContainer {
     @Override
     protected void drawGuiContainerBackgroundLayer(final float a, final int b, final int c) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.getTextureManager().bindTexture(new ResourceLocation(References.MOD_ID, "textures/gui/inventory.png"));
+        this.mc.getTextureManager().bindTexture(Textures.GUI.KEY_GUI);
         final int x = (width - xSize) / 2;
         final int y = (height - ySize) / 2;
         drawTexturedModalRect(x, y, 0, 0, xSize, ySize);

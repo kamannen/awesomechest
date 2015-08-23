@@ -3,13 +3,12 @@ package kamannen.awesomechest.gui;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import kamannen.awesomechest.container.ContainerAWChest;
-import kamannen.awesomechest.lib.References;
+import kamannen.awesomechest.lib.Textures;
 import kamannen.awesomechest.lib.Values;
 import kamannen.awesomechest.tileentity.ChestTileEntity;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
@@ -49,8 +48,7 @@ public class GUIAWChest extends GuiContainer {
         if (super.inventorySlots instanceof ContainerAWChest) {
             chestSize = ((ContainerAWChest) super.inventorySlots).getMyInventory().getSizeInventory();
         }
-        this.mc.getTextureManager().bindTexture(new ResourceLocation(References.MOD_ID,
-                "textures/gui/chest_inventory_" + chestSize + ".png"));
+        this.mc.getTextureManager().bindTexture(Textures.GUI.getAwesomeChestGUI(chestSize));
         final int x = (width - xSize) / 2;
         final int y = (height - ySize) / 2;
         drawTexturedModalRect(x, y, 0, 0, xSize, ySize);

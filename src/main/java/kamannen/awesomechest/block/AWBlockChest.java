@@ -3,6 +3,7 @@ package kamannen.awesomechest.block;
 import kamannen.awesomechest.AwesomechestMod;
 import kamannen.awesomechest.gui.EGUIs;
 import kamannen.awesomechest.lib.Names;
+import kamannen.awesomechest.lib.RenderIDs;
 import kamannen.awesomechest.tileentity.ChestTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -14,6 +15,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 
 import java.util.Random;
@@ -30,7 +32,7 @@ public class AWBlockChest extends BlockContainer {
 
     @Override
     public boolean isOpaqueCube() {
-        return true;
+        return false;
     }
 
     @Override
@@ -89,7 +91,19 @@ public class AWBlockChest extends BlockContainer {
 
     @Override
     public int getRenderType() {
-        return -1;
+        return RenderIDs.awesomeChest;
+    }
+
+    @Override
+    public AxisAlignedBB getSelectedBoundingBoxFromPool(final World world, final int x, final int y, final int z) {
+        this.setBlockBounds(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
+        return super.getSelectedBoundingBoxFromPool(world, x, y, z);
+    }
+
+    @Override
+    public AxisAlignedBB getCollisionBoundingBoxFromPool(final World world, final int x, final int y, final int z) {
+        this.setBlockBoundsBasedOnState(world, x, y, z);
+        return super.getCollisionBoundingBoxFromPool(world, x, y, z);
     }
 
     @Override
