@@ -27,20 +27,22 @@ public class GUIAWChest extends GuiContainer {
 
     @Override
     protected void drawGuiContainerForegroundLayer(final int a, final int b) {
-
         final String inventoryName = this.chestTileEntity.hasCustomInventoryName() ? this.chestTileEntity.getInventoryName() : I18n.format(this.chestTileEntity.getInventoryName());
 
-        if (this.fontRendererObj.getStringWidth(inventoryName) >= this.ySize) {
+        final int stringWidth = this.fontRendererObj.getStringWidth(inventoryName);
+        final int maxSize = this.ySize - 7;
+
+        // Percentage maxSize is of string width, to fit the string perfectly in GUI.
+        float perc = (float)maxSize / (float)stringWidth;
+        if (stringWidth >= maxSize) {
             GL11.glPushMatrix();
-            GL11.glScalef(0.7F, 0.9F, 0.7F);
-            this.fontRendererObj.drawString(inventoryName, 8, 6, 4210752);
+            GL11.glScalef(perc, 0.9F, perc);
+            this.fontRendererObj.drawString(inventoryName, 9, 6, 4210752);
             GL11.glPopMatrix();
         } else {
-            this.fontRendererObj.drawString(inventoryName, 8, 6, 4210752);
+            this.fontRendererObj.drawString(inventoryName, 9, 6, 4210752);
         }
-
         this.fontRendererObj.drawString(this.player.inventory.hasCustomInventoryName() ? this.player.inventory.getInventoryName() : I18n.format(this.player.inventory.getInventoryName()), 8, this.ySize - 96 + 2, 4210752);
-
     }
 
     @Override
