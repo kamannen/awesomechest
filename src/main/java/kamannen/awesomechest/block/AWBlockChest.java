@@ -16,7 +16,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.Random;
 
@@ -39,7 +41,21 @@ public class AWBlockChest extends BlockContainer {
     public void onBlockPlacedBy(final World world, final int x, final int y, final int z, final EntityLivingBase livingBase, final ItemStack itemStack) {
         super.onBlockPlacedBy(world, x, y, z, livingBase, itemStack);
         if (livingBase instanceof EntityPlayer) {
-            ((ChestTileEntity) world.getTileEntity(x, y, z)).setPlayer(((EntityPlayer) livingBase).getDisplayName());
+            int facing = MathHelper.floor_double(livingBase.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+            ForgeDirection direction = ForgeDirection.SOUTH;
+
+            if (facing == 0) {
+                direction = ForgeDirection.NORTH;
+            } else if (facing == 1) {
+                direction = ForgeDirection.EAST;
+            } else if (facing == 2) {
+                direction = ForgeDirection.SOUTH;
+            } else if (facing == 3) {
+                direction = ForgeDirection.WEST;
+            }
+            ((ChestTileEntity) world.getTileEntity(x, y, z))
+                    .setPlayer(((EntityPlayer) livingBase).getDisplayName())
+                    .setFacingDirection(direction);
         }
     }
 

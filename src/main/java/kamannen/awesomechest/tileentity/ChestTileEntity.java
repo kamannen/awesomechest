@@ -13,6 +13,7 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class ChestTileEntity extends TileEntity implements IInventory {
 
@@ -22,15 +23,27 @@ public class ChestTileEntity extends TileEntity implements IInventory {
     public float prevLidAngle;
     public int numUsingPlayers;
     private int ticksSinceSync;
+    private ForgeDirection facingDirection;
     private ItemStack[] content;
 
     public ChestTileEntity() {
         super();
+        facingDirection = ForgeDirection.SOUTH;
         content = new ItemStack[Values.Entities.CHEST_INVENTORY_SIZE_SMALL];
     }
 
-    public void setPlayer(final String playerName) {
+    public ChestTileEntity setPlayer(final String playerName) {
         this.playerName = playerName;
+        return this;
+    }
+
+    public ChestTileEntity setFacingDirection(final ForgeDirection direction) {
+        this.facingDirection = direction;
+        return this;
+    }
+
+    public ForgeDirection getFacingDirection() {
+        return this.facingDirection;
     }
 
     @Override
@@ -179,6 +192,7 @@ public class ChestTileEntity extends TileEntity implements IInventory {
 
         this.storedBlock = Block.getBlockById(nbtTagCompound.getInteger("blockId"));
         this.playerName = nbtTagCompound.getString("playerName");
+        this.facingDirection = ForgeDirection.getOrientation(nbtTagCompound.getByte(Names.NBT.FACING_DIRECTION));
 
         NBTTagList tagList = nbtTagCompound.getTagList(Names.NBT.ITEMS, 10);
         content = new ItemStack[this.getSizeInventory()];
@@ -197,6 +211,7 @@ public class ChestTileEntity extends TileEntity implements IInventory {
 
         nbtTagCompound.setInteger("blockId", Block.getIdFromBlock(this.storedBlock));
         nbtTagCompound.setString("playerName", this.playerName);
+        nbtTagCompound.setByte(Names.NBT.FACING_DIRECTION, (byte) this.facingDirection.ordinal());
 
         NBTTagList tagList = new NBTTagList();
         for (int currentIndex = 0; currentIndex < content.length; ++currentIndex) {

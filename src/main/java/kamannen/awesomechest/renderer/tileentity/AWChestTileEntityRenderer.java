@@ -28,9 +28,9 @@ public class AWChestTileEntityRenderer extends TileEntitySpecialRenderer {
             ChestTileEntity chestTileEntity = (ChestTileEntity) tileEntity;
             ForgeDirection direction = ForgeDirection.SOUTH;
 
-            /*if (chestTileEntity.getWorldObj() != null) {
-                direction = chestTileEntity.getOrientation();
-            }*/
+            if (chestTileEntity.getWorldObj() != null) {
+                direction = chestTileEntity.getFacingDirection();
+            }
 
             this.bindTexture(Textures.TileEntities.AWESOME_CHEST);
             GL11.glPushMatrix();
