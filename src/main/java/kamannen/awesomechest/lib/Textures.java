@@ -19,7 +19,7 @@ public class Textures {
 
     public static class TileEntities {
         private static final String ENTITY_TEXTURE_LOCATION = "textures/entity/";
-        public static final ResourceLocation AWESOME_CHEST = new ResourceLocation(References.MOD_ID, ENTITY_TEXTURE_LOCATION + "awesomechest.png");
+        public static final ResourceLocation AWESOME_CHEST = new ResourceLocation(References.MOD_ID, ENTITY_TEXTURE_LOCATION + "awesomeChest.png");
     }
 
 }
