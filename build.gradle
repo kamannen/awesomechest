@@ -62,8 +62,4 @@ processResources
     }
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.6'
-}
-
 sourceSets { main { output.resourcesDir = output.classesDir } }
