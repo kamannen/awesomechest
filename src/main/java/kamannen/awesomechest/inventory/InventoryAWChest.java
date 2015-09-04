@@ -7,12 +7,12 @@ import net.minecraft.item.ItemStack;
 public class InventoryAWChest extends AWInventoryBase {
 
     public InventoryAWChest() {
-        super(new ItemStack[Values.Entities.CHEST_INVENTORY_SIZE_SMALL]);
+        super(new ItemStack[Values.Entities.CHEST_INVENTORY_SIZE_SMALL + Values.Entities.CHEST_INVENTORY_SIZE_UPGRADES]);
     }
 
     @Override
     public int getSizeInventory() {
-        return Values.Entities.CHEST_INVENTORY_SIZE_SMALL;
+        return Values.Entities.CHEST_INVENTORY_SIZE_SMALL + Values.Entities.CHEST_INVENTORY_SIZE_UPGRADES;
     }
 
     @Override

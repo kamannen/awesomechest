@@ -9,7 +9,8 @@ public class Textures {
 
         public static ResourceLocation getAwesomeChestGUI(final int chestSize) {
             return new ResourceLocation(References.MOD_ID,
-                    GUI_TEXTURE_LOCATION + "chest_inventory_" + chestSize + ".png");
+                    GUI_TEXTURE_LOCATION + "chest_inventory_" +
+                            (chestSize - Values.Entities.CHEST_INVENTORY_SIZE_UPGRADES) + ".png");
         }
         public static final ResourceLocation AWESOME_CHEST_GUI_SMALL = new ResourceLocation(References.MOD_ID, GUI_TEXTURE_LOCATION + "chest_inventory_27.png");
         public static final ResourceLocation AWESOME_CHEST_GUI_LARGE = new ResourceLocation(References.MOD_ID, GUI_TEXTURE_LOCATION + "chest_inventory_54.png");

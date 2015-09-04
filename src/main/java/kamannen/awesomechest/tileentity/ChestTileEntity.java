@@ -28,7 +28,8 @@ public class ChestTileEntity extends TileEntity implements IInventory {
     public ChestTileEntity() {
         super();
         facingDirection = ForgeDirection.SOUTH;
-        content = new ItemStack[Values.Entities.CHEST_INVENTORY_SIZE_SMALL];
+        content = new ItemStack[Values.Entities.CHEST_INVENTORY_SIZE_SMALL
+                + Values.Entities.CHEST_INVENTORY_SIZE_UPGRADES];
     }
 
     public ChestTileEntity setPlayer(final String playerName) {

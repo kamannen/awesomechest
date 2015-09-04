@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 import java.util.List;
 import java.util.UUID;
 
-public class ItemLock extends ACItem {
+public class ItemLock extends ACItem implements ACChestUpgrade{
 
     private boolean CONTAINS_KEY;
 
@@ -51,35 +51,6 @@ public class ItemLock extends ACItem {
 
         return itemStack;
     }
-
-    /*@Override
-    public boolean onItemUse(final ItemStack stack, final EntityPlayer player, final World world, final int x, final int y, final int z, final int side, final float hitX, final float hitY, final float hitZ) {
-        if (!world.isRemote) {
-            if (stack != null && player.isSneaking()) {
-                final TileEntity tileEntity = world.getTileEntity(x, y, z);
-                if (stack.getItem() instanceof ItemLock) {
-                    final NBTTagList nbttaglist = stack.stackTagCompound.getTagList("Items", Constants.NBT.TAG_COMPOUND);
-                    if (nbttaglist != null) {
-                        final NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(0);
-                        final ItemStack itemStack = ItemStack.loadItemStackFromNBT(nbttagcompound1);
-                        if (itemStack.getItem() instanceof ItemBlock) {
-//                            final HCChestTileEntity hcChestTileEntity = new HCChestTileEntity(tileEntity, ((ItemBlock) itemStack.getItem()).field_150939_a);
-                            world.setBlock(x, y, z, ModBlocks.blockChest);
-                            final TileEntity tileEntity1 = world.getTileEntity(x, y, z);
-                            if (tileEntity1 instanceof ChestTileEntity) {
-                                ((ChestTileEntity) tileEntity1).updateHiddenInfo(tileEntity, ((ItemBlock) itemStack.getItem()).field_150939_a);
-                            }
-//                            world.setTileEntity(x, y, z, hcChestTileEntity);
-//                            hcChestTileEntity.updateContainingBlockInfo();
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-
-        return false;
-    }*/
 
     public static void setUUID(final ItemStack itemStack) {
         initNBTTagCompound(itemStack);

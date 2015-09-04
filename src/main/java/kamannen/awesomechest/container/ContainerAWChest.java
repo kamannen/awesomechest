@@ -73,12 +73,20 @@ public class ContainerAWChest extends Container {
     protected void layoutContainer(final EntityPlayer player, final IInventory chestInventory, final int xSize, final int ySize) {
         final int leftCol = 8 + GUIHelper.LEFT_SLOT_SIZE;
 
+        /* Chest inventory */
         for (int chestRow = 0; chestRow < 3; chestRow++) {
             for (int chestCol = 0; chestCol < 9; chestCol++) {
                 addSlotToContainer(new Slot(chestInventory, chestCol + chestRow * 9, leftCol + chestCol * 18, 18 + chestRow * 18));
             }
         }
 
+        /* Upgrade column */
+        for (int upgradeRow = 0; upgradeRow < GUIHelper.NUM_UPGRADE_SLOTS; upgradeRow++) {
+            addSlotToContainer(new ACUpgradeSlot(chestInventory, chestInventory.getSizeInventory() - 1 - upgradeRow,
+                    leftCol - GUIHelper.LEFT_SLOT_SIZE, 18 + upgradeRow * 18));
+        }
+
+        /* Player inventory */
         for (int playerInvRow = 0; playerInvRow < 3; playerInvRow++) {
             for (int playerInvCol = 0; playerInvCol < 9; playerInvCol++) {
                 addSlotToContainer(new Slot(player.inventory, playerInvCol + playerInvRow * 9 + 9,
@@ -86,6 +94,7 @@ public class ContainerAWChest extends Container {
             }
         }
 
+        /* Player hotbar */
         for (int hotbarSlot = 0; hotbarSlot < 9; hotbarSlot++) {
             addSlotToContainer(new Slot(player.inventory, hotbarSlot, leftCol + hotbarSlot * 18, ySize - 24));
         }
