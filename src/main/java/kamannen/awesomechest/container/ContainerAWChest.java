@@ -1,6 +1,7 @@
 package kamannen.awesomechest.container;
 
 import kamannen.awesomechest.item.ItemLock;
+import kamannen.awesomechest.lib.GUIHelper;
 import kamannen.awesomechest.tileentity.ChestTileEntity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -70,14 +71,14 @@ public class ContainerAWChest extends Container {
     }
 
     protected void layoutContainer(final EntityPlayer player, final IInventory chestInventory, final int xSize, final int ySize) {
+        final int leftCol = 8 + GUIHelper.LEFT_SLOT_SIZE;
 
         for (int chestRow = 0; chestRow < 3; chestRow++) {
             for (int chestCol = 0; chestCol < 9; chestCol++) {
-                addSlotToContainer(new Slot(chestInventory, chestCol + chestRow * 9, 8 + chestCol * 18, 18 + chestRow * 18));
+                addSlotToContainer(new Slot(chestInventory, chestCol + chestRow * 9, leftCol + chestCol * 18, 18 + chestRow * 18));
             }
         }
 
-        final int leftCol = 8;
         for (int playerInvRow = 0; playerInvRow < 3; playerInvRow++) {
             for (int playerInvCol = 0; playerInvCol < 9; playerInvCol++) {
                 addSlotToContainer(new Slot(player.inventory, playerInvCol + playerInvRow * 9 + 9,

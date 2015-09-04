@@ -3,6 +3,7 @@ package kamannen.awesomechest.gui;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import kamannen.awesomechest.container.ContainerAWChest;
+import kamannen.awesomechest.lib.GUIHelper;
 import kamannen.awesomechest.lib.Textures;
 import kamannen.awesomechest.lib.Values;
 import kamannen.awesomechest.tileentity.ChestTileEntity;
@@ -21,7 +22,7 @@ public class GUIAWChest extends GuiContainer {
         super(new ContainerAWChest(player, tileEntity));
         this.chestTileEntity = tileEntity;
         this.player = player;
-        this.xSize = 176;
+        this.xSize = 176 + GUIHelper.LEFT_SLOT_SIZE;
         this.ySize = 168;
     }
 
@@ -42,7 +43,8 @@ public class GUIAWChest extends GuiContainer {
         } else {
             this.fontRendererObj.drawString(inventoryName, 9, 6, 4210752);
         }
-        this.fontRendererObj.drawString(this.player.inventory.hasCustomInventoryName() ? this.player.inventory.getInventoryName() : I18n.format(this.player.inventory.getInventoryName()), 8, this.ySize - 96 + 2, 4210752);
+        this.fontRendererObj.drawString(this.player.inventory.hasCustomInventoryName() ? this.player.inventory.getInventoryName() : I18n.format(this.player.inventory.getInventoryName()),
+                9 + GUIHelper.LEFT_SLOT_SIZE, this.ySize - 96 + 2, 4210752);
     }
 
     @Override
