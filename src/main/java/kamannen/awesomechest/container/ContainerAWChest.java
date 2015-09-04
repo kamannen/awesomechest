@@ -1,7 +1,8 @@
 package kamannen.awesomechest.container;
 
-import kamannen.awesomechest.item.ItemLock;
+import kamannen.awesomechest.item.ACChestUpgrade;
 import kamannen.awesomechest.lib.GUIHelper;
+import kamannen.awesomechest.lib.Values;
 import kamannen.awesomechest.tileentity.ChestTileEntity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -44,19 +45,22 @@ public class ContainerAWChest extends Container {
 
 
     @Override
-    public ItemStack transferStackInSlot(final EntityPlayer player, final int i) {
+    public ItemStack transferStackInSlot(final EntityPlayer player, final int fromItemIndex) {
         ItemStack itemstack = null;
-        final Slot slot = (Slot) inventorySlots.get(i);
+        final Slot slot = (Slot) inventorySlots.get(fromItemIndex);
         if (slot != null && slot.getHasStack()) {
             final ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
             final int sizeInventory = this.inventory.getSizeInventory();
-            if (i < sizeInventory) {
-                if (!mergeItemStack(itemstack1, sizeInventory, inventorySlots.size(), false)) {
+            if (fromItemIndex < sizeInventory) { // shift clicked item is in chest inventory
+                if (!mergeItemStack(itemstack1, sizeInventory, inventorySlots.size(), true)) {
                     return null;
                 }
-            } else if (itemstack.getItem() instanceof ItemLock) {
-                return null;
+            } else if (itemstack.getItem() instanceof ACChestUpgrade) {
+                if (!mergeItemStack(itemstack1, sizeInventory - Values.Entities.CHEST_INVENTORY_SIZE_UPGRADES,
+                        sizeInventory, false) && !mergeItemStack(itemstack1, 0, sizeInventory, false)) {
+                    return null;
+                }
             } else if (!mergeItemStack(itemstack1, 0, sizeInventory, false)) {
                 return null;
             }
