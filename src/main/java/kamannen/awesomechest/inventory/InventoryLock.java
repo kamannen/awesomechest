@@ -1,6 +1,9 @@
 package kamannen.awesomechest.inventory;
 
+import kamannen.awesomechest.item.ItemKey;
+import kamannen.awesomechest.item.ModItems;
 import kamannen.awesomechest.lib.Names;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -12,7 +15,6 @@ import java.util.UUID;
 public class InventoryLock extends AWInventoryBase {
 
     public ItemStack itemStack;
-//    protected ItemStack[] content;
 
     public InventoryLock(final ItemStack is) {
         super(new ItemStack[1]);
@@ -42,6 +44,7 @@ public class InventoryLock extends AWInventoryBase {
 
     public void readFromNBT(final NBTTagCompound nbttagcompound) {
         if (nbttagcompound != null) {
+
             final NBTTagList nbttaglist = nbttagcompound.getTagList("Items", Constants.NBT.TAG_COMPOUND);
             setContent(new ItemStack[getSizeInventory()]);
             for (int i = 0; i < nbttaglist.tagCount(); i++) {
@@ -51,6 +54,23 @@ public class InventoryLock extends AWInventoryBase {
                     getContent()[j] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
                 }
             }
+            if (getContent()[0] == null) {
+                makeAndAddKeyToLock(nbttagcompound);
+            }
+        }
+    }
+
+    private void makeAndAddKeyToLock(final NBTTagCompound nbttagcompound) {
+        final boolean isNew = nbttagcompound.getBoolean("new");
+        if (isNew) {
+            final int code = nbttagcompound.getInteger(Names.NBT.key);
+            final ItemKey itemKey = (ItemKey) ModItems.itemKey;
+            ItemStack key = new ItemStack(itemKey.setLockCode(code));
+
+            final Minecraft minecraft = Minecraft.getMinecraft();
+            itemKey.onCreated(key, minecraft.theWorld, minecraft.thePlayer);
+            setInventorySlotContents(0, key.copy());
+            nbttagcompound.setBoolean("new", false);
         }
     }
 
@@ -107,12 +127,4 @@ public class InventoryLock extends AWInventoryBase {
 
         return null;
     }
-
-    /*public static boolean hasUUID(final ItemStack itemStack) {
-        return hasTag(itemStack, Names.NBT.UUID_MOST_SIG) && hasTag(itemStack, Names.NBT.UUID_LEAST_SIG);
-    }
-
-    public static boolean hasTag(final ItemStack itemStack, final String keyName) {
-        return itemStack != null && itemStack.stackTagCompound != null && itemStack.stackTagCompound.hasKey(keyName);
-    }*/
 }

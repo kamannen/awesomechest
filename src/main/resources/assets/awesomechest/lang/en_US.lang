@@ -1,0 +1,6 @@
+item.itemLock.name=Lock
+item.itemKey.name=Key
+
+tile.awesomeChest.name=Awesome chest
+
+key.lock.id.message=ID: %d

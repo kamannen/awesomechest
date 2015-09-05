@@ -10,6 +10,7 @@ public class Names {
 
     public static class Items {
         public static final String LOCK = "itemLock";
+        public static final String KEY = "itemKey";
     }
 
     public static class NBT {

@@ -7,48 +7,47 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
-public class ItemLock extends ACItem implements ACChestUpgrade{
-
-    private boolean CONTAINS_KEY;
+//TODO: Figure out why shift click crafting doesn't create NBT, and why addInformation doesn't update info on lock immediately
+public class ItemLock extends ACItem implements ACChestUpgrade {
 
     public ItemLock() {
         super();
-        CONTAINS_KEY = true;
-        // todo: create key item and place in lock inventory
-
-
         setUnlocalizedName(Names.Items.LOCK);
     }
 
     @Override
     public void onCreated(final ItemStack itemStack, final World world, final EntityPlayer entityPlayer) {
-        //TODO: remove this method?
-        itemStack.stackTagCompound = new NBTTagCompound();
-        itemStack.stackTagCompound.setString(Names.NBT.key, "TODO: Replace this.");
+        if (!world.isRemote) {
+            final int code = new Random().nextInt(Integer.MAX_VALUE - (Integer.MAX_VALUE / 2)) + (Integer.MAX_VALUE / 2);
+            setUUID(itemStack);
+            itemStack.stackTagCompound.setInteger(Names.NBT.key, code);
+            itemStack.stackTagCompound.setBoolean("new", true);
+        }
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public void addInformation(final ItemStack itemStack, final EntityPlayer player,
                                final List list, final boolean b) {
-
-        if (CONTAINS_KEY) {
-            list.add(EnumChatFormatting.GREEN + "Contains key");
+        final NBTTagCompound tagCompound = itemStack.getTagCompound();
+        if (tagCompound != null) {
+            final int code = itemStack.stackTagCompound.getInteger(Names.NBT.key);
+            list.add(EnumChatFormatting.GREEN + StatCollector.translateToLocalFormatted("key.lock.id.message", code));
         }
     }
 
     @Override
     public ItemStack onItemRightClick(final ItemStack itemStack, final World world, final EntityPlayer entityPlayer) {
         if (!world.isRemote && !entityPlayer.isSneaking()) {
-            setUUID(itemStack);
             entityPlayer.openGui(AwesomechestMod.instance, EGUIs.LOCK.ordinal(), world, (int) entityPlayer.posX, (int) entityPlayer.posY, (int) entityPlayer.posZ);
         }
-
         return itemStack;
     }
 
