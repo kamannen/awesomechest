@@ -2,12 +2,16 @@ package kamannen.awesomechest.container;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import kamannen.awesomechest.inventory.InventoryLock;
+import kamannen.awesomechest.item.ItemKey;
 import kamannen.awesomechest.item.ItemLock;
+import kamannen.awesomechest.lib.Names;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class ContainerLock extends Container {
 
@@ -172,7 +176,20 @@ public class ContainerLock extends Container {
 
         @Override
         public boolean isItemValid(final ItemStack itemStack) {
-            return true; //TODO: Check that item is a key
+            if (itemStack != null) {
+                final Item item = itemStack.getItem();
+                if (item instanceof ItemKey) {
+                    final NBTTagCompound stackTagCompoundLock = containerLock.inventory.itemStack.stackTagCompound;
+                    final NBTTagCompound stackTagCompoundKey = itemStack.stackTagCompound;
+                    if (stackTagCompoundLock != null && stackTagCompoundLock.hasKey(Names.NBT.key)
+                            && stackTagCompoundKey != null && stackTagCompoundKey.hasKey(Names.NBT.key)) {
+                        final int codeLock = stackTagCompoundLock.getInteger(Names.NBT.key);
+                        final int codeKey = stackTagCompoundKey.getInteger(Names.NBT.key);
+                        return codeKey == codeLock;
+                    }
+                }
+            }
+            return false;
         }
     }
 }
