@@ -61,16 +61,17 @@ public class InventoryLock extends AWInventoryBase {
     }
 
     private void makeAndAddKeyToLock(final NBTTagCompound nbttagcompound) {
-        final boolean isNew = nbttagcompound.getBoolean("new");
+        final boolean isNew = nbttagcompound.getBoolean(Names.NBT.NEW);
         if (isNew) {
             final int code = nbttagcompound.getInteger(Names.NBT.key);
             final ItemKey itemKey = (ItemKey) ModItems.itemKey;
-            ItemStack key = new ItemStack(itemKey.setLockCode(code));
+            ItemStack key = new ItemStack(itemKey);
+            itemKey.setLockCode(key, code);
 
             final Minecraft minecraft = Minecraft.getMinecraft();
             itemKey.onCreated(key, minecraft.theWorld, minecraft.thePlayer);
             setInventorySlotContents(0, key.copy());
-            nbttagcompound.setBoolean("new", false);
+            nbttagcompound.setBoolean(Names.NBT.NEW, false);
         }
     }
 

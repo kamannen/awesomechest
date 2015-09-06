@@ -11,10 +11,11 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
 //TODO: Figure out why shift click crafting doesn't create NBT, and why addInformation doesn't update info on lock immediately
+// It's because shift clicking gives us the empty itemstack where the actual itemstack is going to be merged,
+// not the actual itemstack with our item
 public class ItemLock extends ACItem implements ACChestUpgrade {
 
     public ItemLock() {
@@ -25,10 +26,7 @@ public class ItemLock extends ACItem implements ACChestUpgrade {
     @Override
     public void onCreated(final ItemStack itemStack, final World world, final EntityPlayer entityPlayer) {
         if (!world.isRemote) {
-            final int code = new Random().nextInt(Integer.MAX_VALUE - (Integer.MAX_VALUE / 2)) + (Integer.MAX_VALUE / 2);
             setUUID(itemStack);
-            itemStack.stackTagCompound.setInteger(Names.NBT.key, code);
-            itemStack.stackTagCompound.setBoolean("new", true);
         }
     }
 

@@ -17,6 +17,7 @@ public class Names {
         public static final String UUID_MOST_SIG = "itemLock";
         public static final String UUID_LEAST_SIG = "itemLock";
         public static final String key = "key";
+        public static final String NEW = "new";
         public static final String ITEMS = "Items";
         public static final String FACING_DIRECTION = "directionFacing";
     }
