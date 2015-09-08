@@ -20,6 +20,7 @@ public class Names {
         public static final String NEW = "new";
         public static final String ITEMS = "Items";
         public static final String FACING_DIRECTION = "directionFacing";
+        public static final String CHEST_LOCKED = "chestLocked";
     }
 
     public static String getBlockName(final Block block) {

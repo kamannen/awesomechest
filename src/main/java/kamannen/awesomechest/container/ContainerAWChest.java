@@ -16,7 +16,9 @@ public class ContainerAWChest extends Container {
 
     public ContainerAWChest(final EntityPlayer player, final ChestTileEntity inventory) {
         this.inventory = inventory;
-        inventory.openInventory();
+        if (canInteractWith(player)) {
+            inventory.openInventory();
+        }
         final int sizeInventory = inventory.getSizeInventory();
 
         final int slotPixelSize = 18;
@@ -34,7 +36,7 @@ public class ContainerAWChest extends Container {
 
     @Override
     public boolean canInteractWith(final EntityPlayer player) {
-        return true;
+        return this.inventory.isUseableByPlayer(player);
     }
 
     @Override
@@ -86,7 +88,7 @@ public class ContainerAWChest extends Container {
 
         /* Upgrade column */
         for (int upgradeRow = 0; upgradeRow < GUIHelper.NUM_UPGRADE_SLOTS; upgradeRow++) {
-            addSlotToContainer(new ACUpgradeSlot(chestInventory, chestInventory.getSizeInventory() - 1 - upgradeRow,
+            addSlotToContainer(new ACUpgradeSlot(this.inventory, chestInventory, chestInventory.getSizeInventory() - 1 - upgradeRow,
                     leftCol - GUIHelper.LEFT_SLOT_SIZE, 18 + upgradeRow * 18));
         }
 

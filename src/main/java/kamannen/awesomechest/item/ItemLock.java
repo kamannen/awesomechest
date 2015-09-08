@@ -3,6 +3,7 @@ package kamannen.awesomechest.item;
 import kamannen.awesomechest.AwesomechestMod;
 import kamannen.awesomechest.gui.EGUIs;
 import kamannen.awesomechest.lib.Names;
+import kamannen.awesomechest.tileentity.ChestTileEntity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -73,5 +74,11 @@ public class ItemLock extends ACItem implements ACChestUpgrade {
         initNBTTagCompound(itemStack);
 
         itemStack.stackTagCompound.setLong(keyName, keyValue);
+    }
+
+    @Override
+    public boolean addUpgrade(final ChestTileEntity chestTileEntity) {
+        chestTileEntity.setChestLocked(true);
+        return true;
     }
 }

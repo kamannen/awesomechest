@@ -1,8 +1,10 @@
 package kamannen.awesomechest.tileentity;
 
+import kamannen.awesomechest.item.ItemHelper;
 import kamannen.awesomechest.lib.Names;
 import kamannen.awesomechest.lib.Values;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -14,6 +16,9 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ChestTileEntity extends TileEntity implements IInventory {
 
     private String playerName;
@@ -24,12 +29,17 @@ public class ChestTileEntity extends TileEntity implements IInventory {
     private int ticksSinceSync;
     private ForgeDirection facingDirection;
     private ItemStack[] content;
+    private List<EntityPlayer> usingPlayers;
+
+    private boolean chestLocked;
 
     public ChestTileEntity() {
         super();
         facingDirection = ForgeDirection.SOUTH;
         content = new ItemStack[Values.Entities.CHEST_INVENTORY_SIZE_SMALL
                 + Values.Entities.CHEST_INVENTORY_SIZE_UPGRADES];
+        chestLocked = false;
+        usingPlayers = new ArrayList<>();
     }
 
     public ChestTileEntity setPlayer(final String playerName) {
@@ -112,18 +122,23 @@ public class ChestTileEntity extends TileEntity implements IInventory {
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-        return this.worldObj.getTileEntity(xCoord, yCoord, zCoord) == this && entityplayer.getDistanceSq((double) xCoord + 0.5D, (double) yCoord + 0.5D, (double) zCoord + 0.5D) <= 64D;
+    public boolean isUseableByPlayer(final EntityPlayer entityplayer) {
+        return (this.worldObj.getTileEntity(xCoord, yCoord, zCoord) == this
+                && entityplayer.getDistanceSq((double) xCoord + 0.5D, (double) yCoord + 0.5D, (double) zCoord + 0.5D) <= 64D)
+                && (!isChestLocked() || ItemHelper.checkItemIsValidKeyForLock(entityplayer.getCurrentEquippedItem(), content)
+                || usingPlayers.contains(entityplayer));
     }
 
     @Override
     public void openInventory() {
+        usingPlayers.add(Minecraft.getMinecraft().thePlayer);
         ++numUsingPlayers;
         worldObj.addBlockEvent(xCoord, yCoord, zCoord, this.getBlockType(), 1, numUsingPlayers);
     }
 
     @Override
     public void closeInventory() {
+        usingPlayers.remove(Minecraft.getMinecraft().thePlayer);
         --numUsingPlayers;
         worldObj.addBlockEvent(xCoord, yCoord, zCoord, this.getBlockType(), 1, numUsingPlayers);
     }
@@ -192,6 +207,7 @@ public class ChestTileEntity extends TileEntity implements IInventory {
 
         this.storedBlock = Block.getBlockById(nbtTagCompound.getInteger("blockId"));
         this.playerName = nbtTagCompound.getString("playerName");
+        this.chestLocked = nbtTagCompound.getBoolean(Names.NBT.CHEST_LOCKED);
         this.facingDirection = ForgeDirection.getOrientation(nbtTagCompound.getByte(Names.NBT.FACING_DIRECTION));
 
         NBTTagList tagList = nbtTagCompound.getTagList(Names.NBT.ITEMS, 10);
@@ -211,6 +227,7 @@ public class ChestTileEntity extends TileEntity implements IInventory {
 
         nbtTagCompound.setInteger("blockId", Block.getIdFromBlock(this.storedBlock));
         nbtTagCompound.setString("playerName", this.playerName);
+        nbtTagCompound.setBoolean(Names.NBT.CHEST_LOCKED, this.chestLocked);
         nbtTagCompound.setByte(Names.NBT.FACING_DIRECTION, (byte) this.facingDirection.ordinal());
 
         NBTTagList tagList = new NBTTagList();
@@ -229,11 +246,20 @@ public class ChestTileEntity extends TileEntity implements IInventory {
     public Packet getDescriptionPacket() {
         NBTTagCompound tag = new NBTTagCompound();
         this.writeToNBT(tag);
+//        NetworkRegistry.INSTANCE.newSimpleChannel(References.MOD_ID);
         return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 1, tag);
     }
 
     @Override
     public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
         readFromNBT(packet.func_148857_g());
+    }
+
+    public void setChestLocked(final boolean isLocked) {
+        chestLocked = isLocked;
+    }
+
+    public boolean isChestLocked() {
+        return chestLocked;
     }
 }
