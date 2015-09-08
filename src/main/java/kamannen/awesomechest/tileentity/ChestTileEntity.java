@@ -14,6 +14,7 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
@@ -107,8 +108,7 @@ public class ChestTileEntity extends TileEntity implements IInventory {
 
     @Override
     public String getInventoryName() {
-        //TODO: Use lang
-        return "Awesome chest, belonging to: " + this.playerName;
+        return StatCollector.translateToLocalFormatted("chest.header.text", this.playerName);
     }
 
     @Override
@@ -246,7 +246,6 @@ public class ChestTileEntity extends TileEntity implements IInventory {
     public Packet getDescriptionPacket() {
         NBTTagCompound tag = new NBTTagCompound();
         this.writeToNBT(tag);
-//        NetworkRegistry.INSTANCE.newSimpleChannel(References.MOD_ID);
         return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 1, tag);
     }
 
