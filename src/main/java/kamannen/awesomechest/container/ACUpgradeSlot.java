@@ -1,7 +1,6 @@
 package kamannen.awesomechest.container;
 
 import kamannen.awesomechest.item.ACChestUpgrade;
-import kamannen.awesomechest.lib.Values;
 import kamannen.awesomechest.tileentity.ChestTileEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
@@ -10,11 +9,8 @@ import net.minecraft.item.ItemStack;
 
 public class ACUpgradeSlot extends Slot {
 
-    private final ChestTileEntity belongsToChestTileEntity;
-
-    public ACUpgradeSlot(final ChestTileEntity belongsToChestTileEntity, final IInventory inventory, final int slotIndex, final int x, final int y) {
+    public ACUpgradeSlot(final IInventory inventory, final int slotIndex, final int x, final int y) {
         super(inventory, slotIndex, x, y);
-        this.belongsToChestTileEntity = belongsToChestTileEntity;
     }
 
     @Override
@@ -29,30 +25,25 @@ public class ACUpgradeSlot extends Slot {
 
     @Override
     public void onSlotChanged() {
-        if (this.getHasStack()) {
-            final ItemStack stack = this.getStack();
-            final Item item = stack.getItem();
-            if (item instanceof ACChestUpgrade) {
-                final ACChestUpgrade upgradeItem = (ACChestUpgrade) item;
-                upgradeItem.addUpgrade(this.belongsToChestTileEntity);
+        if (this.inventory instanceof ChestTileEntity) {
+            final ChestTileEntity belongsToChestTileEntity = (ChestTileEntity) this.inventory;
+            if (this.getHasStack()) {
+                final ItemStack stack = this.getStack();
+                final Item item = stack.getItem();
+                if (item instanceof ACChestUpgrade && !upgradeAlreadyApplied(item)) {
+                    belongsToChestTileEntity.addUpgrade(this.getSlotIndex(), stack);
+                }
+            } else {
+                belongsToChestTileEntity.removeUpgrade(this.getSlotIndex());
             }
         }
     }
 
     private boolean upgradeAlreadyApplied(final Item item) {
-        final int lastSlot = this.inventory.getSizeInventory();
-        final int firstSlot = lastSlot - Values.Entities.CHEST_INVENTORY_SIZE_UPGRADES;
-
-        for (int slotIndex = firstSlot; slotIndex < lastSlot; slotIndex++) {
-            final ItemStack stackInSlot = this.inventory.getStackInSlot(slotIndex);
-            if (stackInSlot != null) {
-                final Item existingUpgradeItem = stackInSlot.getItem();
-                if (existingUpgradeItem.getUnlocalizedName().equals(item.getUnlocalizedName())) {
-                    return true;
-                }
-            }
+        if (this.inventory instanceof ChestTileEntity && item instanceof ACChestUpgrade) {
+            final ChestTileEntity belongsToChestTileEntity = (ChestTileEntity) this.inventory;
+            return belongsToChestTileEntity.containsUpgrade((ACChestUpgrade) item);
         }
-
         return false;
     }
 }

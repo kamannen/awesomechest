@@ -5,12 +5,14 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
+import java.util.Map;
+
 public class ItemHelper {
 
-    public static boolean checkItemIsValidKeyForLock(final ItemStack currentEquippedItem, final ItemStack[] content) {
+    public static boolean checkItemIsValidKeyForLock(final ItemStack currentEquippedItem, final Map<Integer, ItemStack> upgrades) {
         if (currentEquippedItem != null && currentEquippedItem.getItem() instanceof ItemKey) {
             final NBTTagCompound stackTagCompoundKey = currentEquippedItem.stackTagCompound;
-            for (ItemStack itemStack : content) {
+            for (ItemStack itemStack : upgrades.values()) {
                 if (itemStack != null) {
                     final Item item = itemStack.getItem();
                     if (item instanceof ACChestUpgrade) {

@@ -6,4 +6,6 @@ public interface ACChestUpgrade {
 
     boolean addUpgrade(final ChestTileEntity chestTileEntity);
 
+    boolean removeUpgrade(final ChestTileEntity chestTileEntity);
+
 }

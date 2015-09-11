@@ -1,5 +1,6 @@
 package kamannen.awesomechest.tileentity;
 
+import kamannen.awesomechest.item.ACChestUpgrade;
 import kamannen.awesomechest.item.ItemHelper;
 import kamannen.awesomechest.lib.Names;
 import kamannen.awesomechest.lib.Values;
@@ -18,7 +19,9 @@ import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ChestTileEntity extends TileEntity implements IInventory {
 
@@ -31,6 +34,7 @@ public class ChestTileEntity extends TileEntity implements IInventory {
     private ForgeDirection facingDirection;
     private ItemStack[] content;
     private List<EntityPlayer> usingPlayers;
+    private Map<Integer, ItemStack> activeUpgradesInSlot;
 
     private boolean chestLocked;
 
@@ -41,6 +45,7 @@ public class ChestTileEntity extends TileEntity implements IInventory {
                 + Values.Entities.CHEST_INVENTORY_SIZE_UPGRADES];
         chestLocked = false;
         usingPlayers = new ArrayList<>();
+        activeUpgradesInSlot = new HashMap<>();
     }
 
     public ChestTileEntity setPlayer(final String playerName) {
@@ -51,6 +56,42 @@ public class ChestTileEntity extends TileEntity implements IInventory {
     public ChestTileEntity setFacingDirection(final ForgeDirection direction) {
         this.facingDirection = direction;
         return this;
+    }
+
+    public boolean addUpgrade(final int slot, final ItemStack itemStack) {
+        if (itemStack != null) {
+            if (!activeUpgradesInSlot.containsValue(itemStack)) {
+                if (itemStack.getItem() instanceof ACChestUpgrade) {
+                    final ACChestUpgrade upgrade = (ACChestUpgrade) itemStack.getItem();
+                    if (upgrade.addUpgrade(this)) {
+                        activeUpgradesInSlot.put(slot, itemStack);
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean removeUpgrade(final int slot) {
+        final ItemStack itemStack = activeUpgradesInSlot.get(slot);
+        if (itemStack != null) {
+            final ACChestUpgrade upgrade = (ACChestUpgrade) itemStack.getItem();
+            return upgrade != null && upgrade.removeUpgrade(this) && activeUpgradesInSlot.remove(slot) == null;
+        }
+        return false;
+    }
+
+    public boolean containsUpgrade(final ACChestUpgrade upgrade) {
+        for (ItemStack itemStack : activeUpgradesInSlot.values()) {
+            if (itemStack != null && itemStack.getItem() instanceof ACChestUpgrade) {
+                final ACChestUpgrade activeUpgrade = (ACChestUpgrade) itemStack.getItem();
+                if (activeUpgrade.equals(upgrade)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public ForgeDirection getFacingDirection() {
@@ -125,7 +166,7 @@ public class ChestTileEntity extends TileEntity implements IInventory {
     public boolean isUseableByPlayer(final EntityPlayer entityplayer) {
         return (this.worldObj.getTileEntity(xCoord, yCoord, zCoord) == this
                 && entityplayer.getDistanceSq((double) xCoord + 0.5D, (double) yCoord + 0.5D, (double) zCoord + 0.5D) <= 64D)
-                && (!isChestLocked() || ItemHelper.checkItemIsValidKeyForLock(entityplayer.getCurrentEquippedItem(), content)
+                && (!isChestLocked() || ItemHelper.checkItemIsValidKeyForLock(entityplayer.getCurrentEquippedItem(), activeUpgradesInSlot)
                 || usingPlayers.contains(entityplayer));
     }
 

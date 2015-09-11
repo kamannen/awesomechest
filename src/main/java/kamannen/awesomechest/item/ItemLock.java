@@ -81,4 +81,10 @@ public class ItemLock extends ACItem implements ACChestUpgrade {
         chestTileEntity.setChestLocked(true);
         return true;
     }
+
+    @Override
+    public boolean removeUpgrade(final ChestTileEntity chestTileEntity) {
+        chestTileEntity.setChestLocked(false);
+        return true;
+    }
 }
