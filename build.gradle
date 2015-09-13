@@ -15,7 +15,11 @@ buildscript {
     }
 }
 
+apply plugin: 'java'
 apply plugin: 'forge'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
 
 version = "1.7.10-1.0"
 group= "kamannen.awesomechest" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -39,7 +43,7 @@ dependencies {
     // for more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
-
+    testCompile 'junit:junit:4.12'
 }
 
 processResources
@@ -62,4 +66,18 @@ processResources
     }
 }
 
-sourceSets { main { output.resourcesDir = output.classesDir } }
+sourceSets {
+    main {
+        output.resourcesDir = output.classesDir
+        java {
+            srcDir 'src/main/java'
+        }
+    }
+
+    test {
+        java {
+            srcDir 'src/main/test'
+        }
+    }
+
+}
